@@ -17,8 +17,12 @@
 |lista zalet|div.review-feature__title--positives ~ div.review-feature__item|pros|str|
 |lista wad|div.review-feature__title--negatives ~ div.review-feature__item|cons|str|
 
-## Etapy pracy nad projektem
+## Etapy pracy nad projektem (wersja strukturalna)
+
 1) pobranie składowych pojedyńczej opinii do niezależnych zmiennych
 2) zapisanie wszystkich składowych pojedyńczej opinii do obiektu słownika (dictionary)
 3) pobranie wszystkich opinii z pojedyńczej strony i zapisanie ich do listy słowników
 4) pobranie wszystkich opinii o wskazanym produkcie i zapisanie ich do pliku
+5) wczytanie opini o wskazanym produkcie z pliku do obiektu DataFrame
+6) wyliczenie podstawowych statystyk 
+7) przedstawienie struktury opinii o produkcie na wykresach
