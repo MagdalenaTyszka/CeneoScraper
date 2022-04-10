@@ -15,6 +15,6 @@ print(f"""Dla produktu o identyfikatorze {product_id} dostępnych jest {reviews_
 Dla {pros_count} opinii autorzy podali listę zalet, a dla {cons_count} listę wad.
 Średnia ocena produktu to {product_rating:.1f}.""")
 
-recommendations = reviews.recommendation.value_counts(dropna = False)
-recommendations.plot.pie()
-plt.show
+#recommendations = reviews.recommendation.value_counts(dropna = False)
+#recommendations.plot.pie()
+#plt.show

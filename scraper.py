@@ -10,7 +10,7 @@ def extract_element(ancestor, selector,attribute=None, return_list=False):
             return [item.text.strip() for item in ancestor.select(selector)]
         else:
             return ancestor.select_one(selector).text.strip()
-    except (AttributeError,IndexError): 
+    except (AttributeError,TypeError): 
         return None
 
 review_elements = {
@@ -43,7 +43,7 @@ while(url):
         single_review["useful"] = int(single_review["useful"])
         single_review["useless"] = int(single_review["useless"])
         single_review["publish_date"] = single_review["publish_date"].split(" ").pop(0) if single_review["publish_date"] is not None else None
-        single_review["purcharse_date"] = single_review["purcharse_date"].split(" ").pop(0) if single_review["purchase_date"] is not None else None
+        single_review["purcharse_date"] = single_review["purcharse_date"].split(" ").pop(0) if single_review["purcharse_date"] is not None else None
 
         all_reviews.append(single_review)
 
