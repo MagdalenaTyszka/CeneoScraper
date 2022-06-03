@@ -131,4 +131,5 @@ dmypy.json
 .vscode
 
 # project
-reviews/*.*
+opinions/*.*
+plots/*.*

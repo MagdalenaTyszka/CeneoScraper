@@ -1,8 +1,9 @@
 import json
+import selectors
 import requests
 from bs4 import BeautifulSoup
 
-def extract_element(ancestor, selector,attribute=None, return_list=False):
+def get_item(ancestor, selector,attribute=None, return_list=False):
     try:
         if attribute:
             return ancestor.select_one(selector)[attribute]
@@ -13,7 +14,7 @@ def extract_element(ancestor, selector,attribute=None, return_list=False):
     except (AttributeError,TypeError): 
         return None
 
-review_elements = {
+selectors = {
     "author": ["span.user-post__author-name"],
     "recommendation": ["span.user-post__author-recomendation > em"],
     "stars": ["span.user-post__score-count"],
@@ -28,29 +29,21 @@ review_elements = {
 
 product_id = input("Podaj kod produktu: ")
 url = f"https://www.ceneo.pl/{product_id}#tab=reviews"
-all_reviews = []
+all_opinions = []
 while(url):
     response = requests.get(url)
-    page_dom = BeautifulSoup(response.text, 'html.parser')
-    reviews = page_dom.select("div.js_product-review")
-    for review in reviews:
-        single_review = {key:extract_element(review, *values)
-                        for key, values in review_elements.items()}
-        single_review["review_id"] = review["data-entry-id"]
+    page = BeautifulSoup(response.text, 'html.parser')
+    opinions = page.select("div.js_product-review")
+    for opinion in opinions:
+        single_opinion = {key:get_item(opinion, *values)
+                        for key, values in selectors.items()}
+        single_opinion["review_id"] = opinion["data-entry-id"]
 
-        single_review["recommendation"] = True if single_review["recommendation"] == "Polecam" else False if single_review["recommendation"] == "Nie polecam" else None
-        single_review["stars"] = float(single_review["stars"].split("/").pop(0).replace(",", "."))
-        single_review["useful"] = int(single_review["useful"])
-        single_review["useless"] = int(single_review["useless"])
-        single_review["publish_date"] = single_review["publish_date"].split(" ").pop(0) if single_review["publish_date"] is not None else None
-        single_review["purcharse_date"] = single_review["purcharse_date"].split(" ").pop(0) if single_review["purcharse_date"] is not None else None
-
-        all_reviews.append(single_review)
+        all_opinions.append(single_opinion)
 
     try: 
-        next_page = page_dom.select_one("a.pagination__next")
-        url = "https://www.ceneo.pl"+next_page["href"]
+        url = "https://www.ceneo.pl"+page.select_one("a.pagination__next")["href"]
     except TypeError: url = None    
 
-with open(f"./reviews/{product_id}.json", "w", encoding="UTF-8") as f:
-    json.dump(all_reviews, f, indent=4, ensure_ascii=False)
+with open(f"./opinions/{product_id}.json", "w", encoding="UTF-8") as jf:
+    json.dump(all_opinions, jf, indent=4, ensure_ascii=False)
